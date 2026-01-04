@@ -13,7 +13,7 @@ switch ($action) {
         $controller = new \App\Controller\MovieController();
         $view = $controller->indexAction();
         break;
-        
+
     case 'movie-show':
         $controller = new \App\Controller\MovieController();
         $view = $controller->showAction();
@@ -38,7 +38,87 @@ switch ($action) {
         $controller = new \App\Controller\CommentController();
         $view = $controller->addAction();
         break;
-	
+
+    case 'admin-login':
+        $controller = new \App\Controller\AuthController();
+        $view = $controller->loginAction();
+        break;
+
+    case 'admin-logout':
+        $controller = new \App\Controller\AuthController();
+        $view = $controller->logoutAction();
+        break;
+
+    case 'admin-dashboard':
+        $controller = new \App\Controller\AdminController();
+        $view = $controller->indexAction();
+        break;
+
+    case 'admin-movie-index':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->adminIndexAction(); 
+        break;
+
+    case 'admin-movie-create':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->createAction();
+        break;
+
+    case 'admin-movie-edit':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->editAction();
+        break;
+
+    case 'admin-movie-delete':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->deleteAction();
+        break;
+
+    case 'admin-platform-index':
+        $controller = new \App\Controller\PlatformController();
+        $view = $controller->indexAction();
+        break;
+
+    case 'admin-platform-create':
+        $controller = new \App\Controller\PlatformController();
+        $view = $controller->createAction();
+        break;
+
+    case 'admin-platform-edit':
+        $controller = new \App\Controller\PlatformController();
+        $view = $controller->editAction();
+        break;
+
+    case 'admin-platform-delete':
+        $controller = new \App\Controller\PlatformController();
+        $view = $controller->deleteAction();
+        break;
+
+    case 'admin-category-index':
+        $controller = new \App\Controller\CategoryController();
+        $view = $controller->indexAction();
+        break;
+
+    case 'admin-category-create':
+        $controller = new \App\Controller\CategoryController();
+        $view = $controller->createAction();
+        break;
+
+    case 'admin-category-delete':
+        $controller = new \App\Controller\CategoryController();
+        $view = $controller->deleteAction();
+        break;
+		
+    case 'admin-comment-delete':
+        $controller = new \App\Controller\CommentController();
+        $view = $controller->deleteAction();
+        break;
+        
+    case 'admin-rating-delete':
+        $controller = new \App\Controller\RatingController();
+        $view = $controller->deleteAction();
+        break;
+		
     case 'info':
         $controller = new \App\Controller\InfoController();
         $view = $controller->infoAction();
