@@ -13,7 +13,7 @@ Use Symfony Framework or Laravel instead.
 
 ## Get started with Docker
 
-1. Run `docker compose up --build` from the main category (where `Dockerfile` and `docker-compose.yml` is located
+1. Run `docker compose up --build` from the main category (where `Dockerfile` and `docker-compose.yml` are located)
 2. Framework is accessible via `http://localhost`
 
 ## Usage (without Docker)
