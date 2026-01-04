@@ -109,11 +109,20 @@ switch ($action) {
         $view = $controller->deleteAction();
         break;
 		
+    case 'admin-comment-delete':
+        $controller = new \App\Controller\CommentController();
+        $view = $controller->deleteAction();
+        break;
+        
+    case 'admin-rating-delete':
+        $controller = new \App\Controller\RatingController();
+        $view = $controller->deleteAction();
+        break;
+		
     case 'info':
         $controller = new \App\Controller\InfoController();
         $view = $controller->infoAction();
         break;
-
     default:
         $view = 'Not found';
         break;
