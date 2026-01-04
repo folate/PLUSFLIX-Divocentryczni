@@ -13,7 +13,7 @@ services:
         fi &&
         if [ ! -f data.db ]; then 
           touch data.db;
-          sqlite3 data.db < sql/01-post.sql;
+          sqlite3 data.db < sql/plusflix.sql;
           echo 'Utworzono baze danych i wykonano migracje';
         fi &&
         php -S 0.0.0.0:80 -t public
