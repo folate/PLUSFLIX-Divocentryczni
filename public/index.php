@@ -13,7 +13,7 @@ switch ($action) {
         $controller = new \App\Controller\MovieController();
         $view = $controller->indexAction();
         break;
-        
+
     case 'movie-show':
         $controller = new \App\Controller\MovieController();
         $view = $controller->showAction();
@@ -38,7 +38,38 @@ switch ($action) {
         $controller = new \App\Controller\CommentController();
         $view = $controller->addAction();
         break;
-	
+
+    case 'admin-login':
+        $controller = new \App\Controller\AuthController();
+        $view = $controller->loginAction();
+        break;
+    case 'admin-logout':
+        $controller = new \App\Controller\AuthController();
+        $view = $controller->logoutAction();
+        break;
+
+    case 'admin-dashboard':
+        $controller = new \App\Controller\AdminController();
+        $view = $controller->indexAction();
+        break;
+
+    case 'admin-movie-index':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->adminIndexAction(); 
+        break;
+    case 'admin-movie-create':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->createAction();
+        break;
+    case 'admin-movie-edit':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->editAction();
+        break;
+    case 'admin-movie-delete':
+        $controller = new \App\Controller\MovieController();
+        $view = $controller->deleteAction();
+        break;
+		
     case 'info':
         $controller = new \App\Controller\InfoController();
         $view = $controller->infoAction();
