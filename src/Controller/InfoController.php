@@ -1,6 +1,5 @@
 <?php
 namespace App\Controller;
-
 class InfoController
 {
     public function infoAction(): ?string

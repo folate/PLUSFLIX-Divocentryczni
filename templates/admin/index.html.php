@@ -1,73 +1,52 @@
 <?php
-/** @var array $stats (np. ['movies_count' => 10, 'avg_rating' => 7.5]) */
-/** @var \App\Model\Comment[] $latestComments */
-/** @var \App\Service\Router $router */
-
 $title = 'Dashboard Administratora';
 $bodyClass = 'admin';
-
 ob_start(); ?>
+<div class="admin-dashboard">
     <h1>Pulpit Administratora</h1>
     
-    <div class="admin-menu" style="margin-bottom: 30px; padding: 20px; background: #eee;">
-        <h3>Szybkie akcje:</h3>
-        <ul class="action-list">
-            <li><a href="<?= $router->generatePath('admin-movie-index') ?>">Zarządzaj Filmami</a></li>
-            <li><a href="<?= $router->generatePath('admin-category-index') ?>">Zarządzaj Kategoriami</a></li>
-            <li><a href="<?= $router->generatePath('admin-platform-index') ?>">Zarządzaj Platformami</a></li>
-            <li><a href="<?= $router->generatePath('admin-logout') ?>" style="color: red;">Wyloguj</a></li>
-        </ul>
-    </div>
+    <?php include __DIR__ . DIRECTORY_SEPARATOR . '_tiles.html.php'; ?>
 
-    <div class="stats-grid" style="display: flex; gap: 20px; margin-bottom: 30px;">
-        <div class="stat-box" style="border: 1px solid #ccc; padding: 15px; flex: 1;">
-            <h4>Liczba filmów</h4>
-            <p style="font-size: 2em;"><?= $stats['movies_count'] ?? 0 ?></p>
-        </div>
-        <div class="stat-box" style="border: 1px solid #ccc; padding: 15px; flex: 1;">
-            <h4>Liczba kategorii</h4>
-            <p style="font-size: 2em;"><?= $stats['categories_count'] ?? 0 ?></p>
-        </div>
-        <div class="stat-box" style="border: 1px solid #ccc; padding: 15px; flex: 1;">
-            <h4>Średnia ocen</h4>
-            <p style="font-size: 2em;"><?= number_format($stats['avg_rating'] ?? 0, 2) ?></p>
+    <div class="comments-section">
+        <h1>Liczba komentarzy: <?= count($comments) ?></h2>
+        
+        <div class="comments-list">
+            <?php if (!empty($comments)): ?>
+                <?php foreach ($comments as $comment): ?>
+                <div class="comment-item">
+                    <div class="movie-info">
+                        <img src="<?= $comment->getMovieImage() ?>" alt="Plakat">
+                        <h4><?= htmlspecialchars($comment->getMovieTitle() ?? 'Nieznany film') ?></h4>
+                    </div>
+                    
+                    <div class="comment-details">
+                        <div class="comment-header">
+                            <span class="user-name"><?= htmlspecialchars($comment->getNick()) ?></span>
+                            <div class="header-meta">
+                                <span class="comment-date"><?= $comment->getCreatedAt() ?></span>
+                                <div class="rating-stars" title="Ocena: <?= $comment->getUserRating() ?>/10">
+                                    <?php for($i=1; $i<=10; $i++): ?>
+                                        <span class="star <?= $i <= $comment->getUserRating() ? 'filled' : '' ?>">★</span>
+                                    <?php endfor; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-body"><?= htmlspecialchars($comment->getContent()) ?></div>
+                    </div>
+
+                    <div class="comment-actions">
+                        <form action="<?= $router->generatePath('admin-comment-delete') ?>" method="post" onsubmit="return confirm('Czy na pewno chcesz usunąć ten komentarz?');">
+                            <input type="hidden" name="id" value="<?= $comment->getId() ?>">
+                            <button type="submit" class="btn-delete">Usuń</button>
+                        </form>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="no-comments">Brak komentarzy.</p>
+            <?php endif; ?>
         </div>
     </div>
-
-    <div class="moderation-section">
-        <h3>Ostatnie komentarze (Moderacja)</h3>
-        <table border="1" style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Nick</th>
-                    <th>Film (ID)</th>
-                    <th>Treść</th>
-                    <th>Akcja</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if(!empty($latestComments)): ?>
-                    <?php foreach ($latestComments as $comment): ?>
-                    <tr>
-                        <td><?= $comment->getCreatedAt() ?></td>
-                        <td><?= $comment->getNick() ?></td>
-                        <td><?= $comment->getMovieId() ?></td>
-                        <td><?= htmlspecialchars($comment->getContent()) ?></td>
-                        <td>
-                            <form action="<?= $router->generatePath('admin-comment-delete') ?>" method="post">
-                                <input type="hidden" name="id" value="<?= $comment->getId() ?>">
-                                <input type="submit" value="Usuń (Spam)" style="background: red; color: white; border: none; padding: 5px;">
-                            </form>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="5">Brak nowych komentarzy.</td></tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
-
-<?php $main = ob_get_clean();
+</div>
+<?php $content = ob_get_clean();
 include __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'base.html.php';

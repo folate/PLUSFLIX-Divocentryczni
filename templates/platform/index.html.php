@@ -1,49 +1,50 @@
 <?php
-
-/** @var \App\Model\Platform[] $platforms */
-/** @var \App\Service\Router $router */
-
 $title = 'Zarządzanie Platformami';
 $bodyClass = 'admin';
-
 ob_start(); ?>
-    <h1>Platformy Streamingowe</h1>
+<div class="admin-dashboard">
+    <h1>Pulpit Administratora</h1>
+    <?php include __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . '_tiles.html.php'; ?>
 
-    <div class="admin-controls">
-        <a href="<?= $router->generatePath('admin-platform-create') ?>" class="button">Dodaj platformę</a>
-        <a href="<?= $router->generatePath('admin-dashboard') ?>">Wróć do Panelu</a>
+    <div class="comments-section">
+        <h1>Zarządzanie Platformami - Liczba platform: <?= $platformsCount ?></h1>
+        <div class="admin-controls">
+            <a href="<?= $router->generatePath('admin-platform-create') ?>" class="button">Dodaj platformę</a>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Logo</th>
+                        <th>Nazwa</th>
+                        <th>URL</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($platforms as $platform): ?>
+                        <tr>
+                            <td style="width: 80px; text-align: center;">
+                                <?php if($platform->getLogoPath()): ?>
+                                    <img src="<?= $platform->getLogoPath() ?>" alt="Logo" style="height: 30px;">
+                                <?php endif; ?>
+                            </td>
+                            <td><?= htmlspecialchars($platform->getName()) ?></td>
+                            <td><?= htmlspecialchars($platform->getUrl()) ?></td>
+                            <td>
+                                <a href="<?= $router->generatePath('admin-platform-edit', ['id' => $platform->getId()]) ?>">Edytuj</a>
+                                <form action="<?= $router->generatePath('admin-platform-delete') ?>" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="<?= $platform->getId() ?>">
+                                    <input type="submit" value="Usuń"">
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead>
-            <tr>
-                <th>Logo</th>
-                <th>Nazwa</th>
-                <th>URL</th>
-                <th>Akcje</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($platforms as $platform): ?>
-                <tr>
-                    <td>
-                        <?php if($platform->getLogoPath()): ?>
-                            <img src="/uploads/<?= $platform->getLogoPath() ?>" alt="Logo" style="height: 30px;">
-                        <?php endif; ?>
-                    </td>
-                    <td><?= $platform->getName() ?></td>
-                    <td><?= $platform->getUrl() ?></td>
-                    <td>
-                        <a href="<?= $router->generatePath('admin-platform-edit', ['id' => $platform->getId()]) ?>">Edytuj</a> |
-                        <form action="<?= $router->generatePath('admin-platform-delete') ?>" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="<?= $platform->getId() ?>">
-                            <input type="submit" value="Usuń" onclick="return confirm('Usunąć platformę?');">
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-<?php $main = ob_get_clean();
+</div>
+<?php $content = ob_get_clean(); 
 include __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'base.html.php';
