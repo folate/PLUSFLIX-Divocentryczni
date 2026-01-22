@@ -1,6 +1,5 @@
 <?php
 namespace App\Service;
-
 class Router
 {
     public function generatePath(string $action, ?array $params = []): string
@@ -9,7 +8,6 @@ class Router
         $path = "/index.php" . ($query ? "?$query" : null);
         return $path;
     }
-
     public function redirect($path): void
     {
         header("Location: $path");
