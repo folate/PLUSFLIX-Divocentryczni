@@ -97,18 +97,4 @@ class Platform
             $this->id = null;
         }
     }
-
-    public static function validate(array $data): array
-    {
-        $errors = [];
-        if (empty($data['name'])) {
-            $errors['name'] = 'Nazwa jest wymagana';
-        }
-        if (empty($data['url'])) {
-            $errors['url'] = 'URL jest wymagany';
-        } elseif (!filter_var($data['url'], FILTER_VALIDATE_URL)) {
-            $errors['url'] = 'Podaj poprawny adres URL';
-        }
-        return $errors;
-    }
 }

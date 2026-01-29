@@ -9,7 +9,7 @@ class RatingController
         $movieId = $requestPost['movie_id'] ?? null;
         $ratingValue = $requestPost['rating'] ?? null;
         if ($movieId && $ratingValue) {
-            $cookieId= 0; 
+            $cookieId = session_id(); 
             $rating = new Rating();
             $rating->setMovieId($movieId);
             $rating->setRating((int)$ratingValue);

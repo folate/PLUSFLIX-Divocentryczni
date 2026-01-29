@@ -21,7 +21,7 @@ class Admin
         $admin = new self();
         $admin->id = $row['id'];
         $admin->login = $row['login'];
-        $admin->password = $row['password'];
+        $admin->password = $row['password_hash'];
         return $admin;
     }
 }

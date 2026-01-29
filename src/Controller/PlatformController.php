@@ -16,18 +16,15 @@ class PlatformController
         $html = $templating->render('platform/index.html.php', [
             'platforms' => $platforms,
             'router' => $router,
-            'moviesCount' => 0,
-            'categoriesCount' => 0,
-            'platformsCount' => 0,
-            'commentsCount' => 0
+            'moviesCount' => count($movies),
+            'categoriesCount' => count($categories),
+            'platformsCount' => count($platforms),
+            'commentsCount' => count($comments)
         ]);
         return $html;
     }
     public function createAction(array $requestPost, Templating $templating, Router $router): ?string
     {
-        $platform = new Platform();
-        $errors = [];
-
         if (!empty($requestPost)) {
             $data = $requestPost['platform'] ?? [];
             
@@ -36,23 +33,18 @@ class PlatformController
                 $data['logo_path'] = $uploadedPath;
             }
 
+            $platform = new Platform(); 
             $platform->setName($data['name'] ?? '');
             $platform->setUrl($data['url'] ?? '');
             $platform->setLogoPath($data['logo_path'] ?? '');
-
-            $errors = Platform::validate($data);
-
-            if (empty($errors)) {
-                $platform->save();
-                $router->redirect($router->generatePath('admin-platform-index'));
-                return null;
-            }
+            $platform->save();
+            $router->redirect($router->generatePath('admin-platform-index'));
+            return null;
         }
-        
+        $platform = new Platform();
         $html = $templating->render('platform/create.html.php', [
             'platform' => $platform,
             'router' => $router,
-            'errors' => $errors,
         ]);
         return $html;
     }
@@ -64,33 +56,24 @@ class PlatformController
         if (!$platform) {
             throw new NotFoundException("Brak platformy o id $id");
         }
-        $errors = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST['platform'] ?? [];
 
             $uploadedPath = $this->handleFileUpload($_FILES['logo_file'] ?? null);
             if ($uploadedPath) {
                 $data['logo_path'] = $uploadedPath;
-            } else {
-                 $data['logo_path'] = $platform->getLogoPath();
             }
 
             $platform->setName($data['name']);
             $platform->setUrl($data['url']);
             $platform->setLogoPath($data['logo_path']);
-
-            $errors = Platform::validate($data);
-
-            if (empty($errors)) {
-                $platform->save();
-                $router->redirect($router->generatePath('admin-platform-index'));
-                return null;
-            }
+            $platform->save();
+            $router->redirect($router->generatePath('admin-platform-index'));
+            return null;
         }
         $html = $templating->render('platform/edit.html.php', [
             'platform' => $platform,
             'router' => $router,
-            'errors' => $errors,
         ]);
         return $html;
     }

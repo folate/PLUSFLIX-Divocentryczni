@@ -1,6 +1,7 @@
 <?php
 $title = 'Zarządzanie Platformami';
 $bodyClass = 'admin';
+$adminView = true;
 ob_start(); ?>
 <div class="admin-dashboard">
     <h1>Pulpit Administratora</h1>
@@ -36,7 +37,7 @@ ob_start(); ?>
                                 <a href="<?= $router->generatePath('admin-platform-edit', ['id' => $platform->getId()]) ?>">Edytuj</a>
                                 <form action="<?= $router->generatePath('admin-platform-delete') ?>" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<?= $platform->getId() ?>">
-                                    <input type="submit" value="Usuń"">
+                                    <input type="submit" value="Usuń" onclick="return confirm('Usunąć platformę?');">
                                 </form>
                             </td>
                         </tr>

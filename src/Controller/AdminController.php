@@ -17,10 +17,10 @@ class AdminController
         $comments = Comment::findAll(); 
         $html = $templating->render('admin/index.html.php', [
             'router' => $router,
-            'moviesCount' => 0,
-            'categoriesCount' => 0,
-            'platformsCount' => 0,
-            'comments' => [], 
+            'moviesCount' => count($movies),
+            'categoriesCount' => count($categories),
+            'platformsCount' => count($platforms),
+            'comments' => $comments, 
             'movies' => $movies 
         ]);
         return $html;

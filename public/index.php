@@ -1,9 +1,22 @@
 <?php
 require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'autoload.php';
+session_start();
 $config = new \App\Service\Config();
 $templating = new \App\Service\Templating();
 $router = new \App\Service\Router();
 $action = $_REQUEST['action'] ?? null;
+// Authentication Check for Admin Routes
+if ($action && strpos($action, 'admin-') === 0 && $action !== 'admin-login' && $action !== 'admin-logout') {
+    if (empty($_SESSION['admin_logged'])) {
+        $controller = new \App\Controller\AuthController();
+        // Redirect to login or render login view directly
+        // Better to let index handle the route change or call login action
+        // Setting action to admin-login to fall through switch
+        $action = 'admin-login'; 
+        // Note: admin-login action in switch will handle rendering login page
+    }
+}
+
 switch ($action) {
     case 'movie-index':
     case null:
@@ -100,7 +113,7 @@ switch ($action) {
         break;
     default:
         header("HTTP/1.0 404 Not Found");
-        $view = '<h1>404 - Strona nie znaleziona</h1><p><a href="' . $router->generatePath('movie-index') . '">Powrót na stronę główną</a></p>';
+        $view = $templating->render('404.html.php', ['router' => $router]);
         break;
 }
 if ($view) {

@@ -1,6 +1,7 @@
 <?php
 $title = 'Dashboard Administratora';
 $bodyClass = 'admin';
+$adminView = true; 
 ob_start(); ?>
 <div class="admin-dashboard">
     <h1>Pulpit Administratora</h1>

@@ -29,7 +29,7 @@ ob_start(); ?>
                             <td>
                                 <form action="<?= $router->generatePath('admin-category-delete') ?>" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<?= $category->getId() ?>">
-                                    <input type="submit" value="Usuń">
+                                    <input type="submit" value="Usuń" onclick="return confirm('Czy na pewno usunąć kategorię? Upewnij się, że nie ma przypisanych filmów.');">
                                 </form>
                             </td>
                         </tr>

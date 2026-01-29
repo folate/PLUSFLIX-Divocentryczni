@@ -19,7 +19,7 @@ CREATE TABLE admins (
 );
 
 INSERT INTO admins (id, login, password_hash) VALUES
-(1, 'admin', '$2y$10$PrzykladowyHashHaslaAdmina123');
+(1, 'admin', '$2a$12$mD6usTbl6dgMQDtM6gP26uSLpuOWwiTZ4WSVcwRGyEJmhn.iq2PQO');
 
 -- categories
 CREATE TABLE categories (
