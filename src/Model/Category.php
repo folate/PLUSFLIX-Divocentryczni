@@ -60,13 +60,4 @@ class Category
             $this->id = null;
         }
     }
-
-    public static function validate(array $data): array
-    {
-        $errors = [];
-        if (empty($data['name'])) {
-            $errors['name'] = 'Nazwa jest wymagana';
-        }
-        return $errors;
-    }
 }

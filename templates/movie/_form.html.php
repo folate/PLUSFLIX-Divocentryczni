@@ -148,26 +148,17 @@
     <div class="form-right-column">
         <div class="form-group">
             <label for="title">Tytuł</label>
-            <input type="text" placeholder="Wpisz tytuł filmu" id="title" name="movie[title]" value="<?= $movie ? htmlspecialchars($movie->getTitle() ?? '') : '' ?>" required>
-            <?php if (!empty($errors['title'])): ?>
-                <div style="color: red; font-size: 0.9em; margin-top: 5px;"><?= $errors['title'] ?></div>
-            <?php endif; ?>
+            <input type="text" placeholder="Wpisz tytuł filmu" id="title" name="movie[title]" value="<?= $movie ? $movie->getTitle() : '' ?>" required>
         </div>
         
         <div class="form-row">
             <div class="form-group">
                 <label for="year">Rok produkcji</label>
                 <input type="number" placeholder="Wpisz rok produkcji" id="year" name="movie[year]" value="<?= $movie ? $movie->getYear() : '' ?>" required>
-                 <?php if (!empty($errors['year'])): ?>
-                    <div style="color: red; font-size: 0.9em; margin-top: 5px;"><?= $errors['year'] ?></div>
-                <?php endif; ?>
             </div>
             <div class="form-group">
                 <label for="duration">Czas trwania (minuty)</label>
                 <input type="number" placeholder="Wpisz czas trwania" id="duration" name="movie[duration]" value="<?= $movie ? $movie->getDuration() : '' ?>" required>
-                 <?php if (!empty($errors['duration'])): ?>
-                    <div style="color: red; font-size: 0.9em; margin-top: 5px;"><?= $errors['duration'] ?></div>
-                <?php endif; ?>
             </div>
         </div>
 
@@ -185,10 +176,7 @@
 
         <div class="form-group">
             <label for="description">Opis</label>
-            <textarea id="description" name="movie[description]" rows="5"><?= $movie ? htmlspecialchars($movie->getDescription() ?? '') : '' ?></textarea>
-             <?php if (!empty($errors['description'])): ?>
-                <div style="color: red; font-size: 0.9em; margin-top: 5px;"><?= $errors['description'] ?></div>
-            <?php endif; ?>
+            <textarea id="description" name="movie[description]" rows="5"><?= $movie ? $movie->getDescription() : '' ?></textarea>
         </div>
 
         <div class="form-group">

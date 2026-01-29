@@ -15,35 +15,25 @@ class CategoryController
         $html = $templating->render('category/index.html.php', [
             'categories' => $categories,
             'router' => $router,
-            'moviesCount' => 0,
-            'categoriesCount' => 0,
-            'platformsCount' => 0,
-            'commentsCount' => 0
+            'moviesCount' => count($movies),
+            'categoriesCount' => count($categories),
+            'platformsCount' => count($platforms),
+            'commentsCount' => count($comments)
         ]);
         return $html;
     }
     public function createAction(?array $requestPost, Templating $templating, Router $router): ?string
     {
-        $category = new Category();
-        $errors = [];
-
         if ($requestPost) {
             $data = $requestPost['category'] ?? [];
+            $category = new Category();
             $category->setName($data['name'] ?? '');
-            
-            $errors = Category::validate($data);
-            
-            if (empty($errors)) {
-                $category->save();
-                $router->redirect($router->generatePath('admin-category-index'));
-                return null;
-            }
+            $category->save();
+            $router->redirect($router->generatePath('admin-category-index'));
+            return null;
         }
-        
         $html = $templating->render('category/create.html.php', [
             'router' => $router,
-            'category' => $category,
-            'errors' => $errors,
         ]);
         return $html;
     }

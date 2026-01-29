@@ -9,7 +9,7 @@ class FavoriteController
 {
     public function indexAction(Templating $templating, Router $router): ?string
     {
-        $favoritesIds = [];
+        $favoritesIds = $_SESSION['favorites'] ?? [];
         $sort = $_GET['sort'] ?? null; 
         $movies = [];
         if (!empty($favoritesIds)) {
@@ -60,7 +60,15 @@ class FavoriteController
     {
         $movieId = (int) ($_GET['id'] ?? 0);
         if ($movieId) {
-
+            if (!isset($_SESSION['favorites'])) {
+                $_SESSION['favorites'] = [];
+            }
+            if (in_array($movieId, $_SESSION['favorites'])) {
+                $key = array_search($movieId, $_SESSION['favorites']);
+                unset($_SESSION['favorites'][$key]);
+            } else {
+                $_SESSION['favorites'][] = $movieId;
+            }
         }
         $referer = $_SERVER['HTTP_REFERER'] ?? $router->generatePath('movie-index');
         header("Location: $referer");

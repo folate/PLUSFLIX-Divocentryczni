@@ -132,13 +132,5 @@ function buildSortLink($router, $params, $sortType) {
         <?php endif; ?>
     </div>
 </div>
-<script>
-    document.getElementById('contrast-toggle')?.addEventListener('click', function() {
-        document.body.classList.toggle('high-contrast');
-        if(document.body.classList.contains('high-contrast')) localStorage.setItem('contrast', 'high');
-        else localStorage.removeItem('contrast');
-    });
-    if(localStorage.getItem('contrast') === 'high') document.body.classList.add('high-contrast');
-</script>
 <?php $content = ob_get_clean(); ?>
 <?php include __DIR__ . '/../base.html.php'; ?>

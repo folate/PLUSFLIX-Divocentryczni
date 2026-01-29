@@ -74,7 +74,7 @@ ob_start(); ?>
                         
                         <form action="<?= $router->generatePath('admin-movie-delete') ?>" method="post">
                             <input type="hidden" name="id" value="<?= $movie->getId() ?>">
-                            <button type="submit">
+                            <button type="submit" onclick="return confirm('Czy na pewno chcesz usunąć ten film?');">
                                 Usuń
                             </button>
                         </form>
