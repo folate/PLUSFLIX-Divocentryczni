@@ -11,7 +11,7 @@ ob_start(); ?>
         <h3>Kategorie</h3>
         <div class="tags-container">
             <?php foreach ($categories as $category): ?>
-                <a href="<?= $router->generatePath('movie-index') ?>?category=<?= $category->getId() ?>" class="filter-tag category-tag">
+                <a href="<?= $router->generatePath('movie-index', ['category' => $category->getId()]) ?>" class="filter-tag category-tag">
                     <?= htmlspecialchars($category->getName()) ?>
                 </a>
             <?php endforeach; ?>
@@ -21,7 +21,7 @@ ob_start(); ?>
         <h3>Platformy</h3>
         <div class="tags-container">
             <?php foreach ($platforms as $platform): ?>
-                <a href="<?= $router->generatePath('movie-index') ?>?platform=<?= $platform->getId() ?>" class="filter-tag platform-tag">
+                <a href="<?= $router->generatePath('movie-index', ['platform' => $platform->getId()]) ?>" class="filter-tag platform-tag">
                     <?php if ($platform->getLogoPath()): ?>
                         <img src="<?= htmlspecialchars($platform->getLogoPath()) ?>" class="platform-logo" alt="">
                     <?php endif; ?>

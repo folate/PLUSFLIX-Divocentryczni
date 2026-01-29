@@ -29,7 +29,12 @@
     <div class="header-actions">
         <a href="<?= $router->generatePath('favorite-index') ?>" class="btn-icon" aria-label="Ulubione">❤️</a>
         <button id="contrast-toggle" class="btn-icon" aria-label="Zmień kontrast">🌗</button>
-        <a href="<?= $router->generatePath('admin-login') ?>" class="btn-login">Zaloguj</a>
+        <?php if (!empty($_SESSION['admin_logged'])): ?>
+            <a href="<?= $router->generatePath('admin-dashboard') ?>" class="btn-icon" aria-label="Panel Admina" title="Panel Admina">⚙️</a>
+            <a href="<?= $router->generatePath('admin-logout') ?>" class="btn-login" style="background: transparent; border: 1px solid rgba(255,255,255,0.3);">Wyloguj</a>
+        <?php else: ?>
+            <a href="<?= $router->generatePath('admin-login') ?>" class="btn-login">Zaloguj</a>
+        <?php endif; ?>
     </div>
 </header>
 

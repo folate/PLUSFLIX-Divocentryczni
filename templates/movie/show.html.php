@@ -44,7 +44,7 @@ ob_start(); ?>
             </div>
 
             <div class="hero-actions-bottom">
-                 <button onclick="" class="btn-add-review">Dodaj recenzję</button>
+                 <button onclick="openModal()" class="btn-add-review">Dodaj recenzję</button>
             </div>
         </div>
     </div>
@@ -83,19 +83,24 @@ ob_start(); ?>
                         Jeszcze nikt nie ocenił tego filmu. Bądź pierwszy!
                     </p>
                 <?php else: ?>
-
+                    <?php foreach ($comments as $comment): ?>
+                        <?php $rating = $comment->getUserRating(); ?>
                         <div class="review-item">
                             <div class="review-header">
-
+                                <span class="nick"><?= htmlspecialchars($comment->getNick()) ?></span>
+                                <span class="date"><?= date('d.m.Y', strtotime($comment->getCreatedAt() ?? 'now')) ?></span>
                             </div>
                             <div class="review-content">
-
+                                "<?= htmlspecialchars($comment->getContent()) ?>"
                             </div>
                             <div class="review-rating">
-
+                                <?php 
+                                for ($i = 0; $i < $rating; $i++) echo '★';
+                                for ($i = $rating; $i < 10; $i++) echo '<span class="empty-star">★</span>';
+                                ?>
                             </div>
                         </div>
-        
+                    <?php endforeach; ?>
                 <?php endif; ?>
             </div>
         </div>
@@ -105,6 +110,43 @@ ob_start(); ?>
 <!-- Modal for adding review -->
 <div id="commentModal" class="modal-overlay">
     <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <h3>Twoja opinia</h3>
+        <form action="<?= $router->generatePath('comment-add') ?>" method="post">
+            <input type="hidden" name="movie_id" value="<?= $movie->getId() ?>">
+            
+            <div class="form-group">
+                <label>Twój nick</label>
+                <input type="text" name="nick" placeholder="Podpisz się..." required>
+            </div>
+            
+            <div class="form-group">
+                <label>Ocena</label>
+                <div class="star-rating-input">
+                    <input type="radio" name="rating" id="star10" value="10"><label for="star10" title="Arcydzieło">★</label>
+                    <input type="radio" name="rating" id="star9" value="9"><label for="star9" title="Rewelacyjny">★</label>
+                    <input type="radio" name="rating" id="star8" value="8"><label for="star8" title="Bardzo dobry">★</label>
+                    <input type="radio" name="rating" id="star7" value="7"><label for="star7" title="Dobry">★</label>
+                    <input type="radio" name="rating" id="star6" value="6"><label for="star6" title="Niezły">★</label>
+                    <input type="radio" name="rating" id="star5" value="5"><label for="star5" title="Średni">★</label>
+                    <input type="radio" name="rating" id="star4" value="4"><label for="star4" title="Ujdzie">★</label>
+                    <input type="radio" name="rating" id="star3" value="3"><label for="star3" title="Słaby">★</label>
+                    <input type="radio" name="rating" id="star2" value="2"><label for="star2" title="Bardzo słaby">★</label>
+                    <input type="radio" name="rating" id="star1" value="1" required><label for="star1" title="Nieporozumienie">★</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Komentarz</label>
+                <textarea name="content" rows="4" placeholder="Napisz kilka słów o filmie..." required></textarea>
+            </div>
+            
+            <a href="/assets/Regulamin_Oceniania.pdf" target="_blank" class="rules-link">
+                Regulamin Oceniania
+            </a>
+            
+            <button type="submit" class="btn-submit-review">Dodaj opinię</button>
+        </form>
     </div>
 </div>
 
