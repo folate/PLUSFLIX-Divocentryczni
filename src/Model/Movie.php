@@ -134,31 +134,4 @@ class Movie
         }
         return $movies;
     }
-
-    public static function validate(array $data): array
-    {
-        $errors = [];
-        
-        if (empty($data['title'])) {
-            $errors['title'] = 'Tytuł jest wymagany';
-        }
-        
-        if (empty($data['year'])) {
-            $errors['year'] = 'Rok jest wymagany';
-        } elseif (!filter_var($data['year'], FILTER_VALIDATE_INT) || strlen((string)$data['year']) !== 4) {
-            $errors['year'] = 'Rok musi być poprawnym rokiem (4 cyfry)';
-        }
-        
-        if (empty($data['duration'])) {
-            $errors['duration'] = 'Czas trwania jest wymagany';
-        } elseif (!filter_var($data['duration'], FILTER_VALIDATE_INT)) {
-            $errors['duration'] = 'Czas trwania musi być liczbą';
-        }
-        
-        if (empty($data['description'])) {
-            $errors['description'] = 'Opis jest wymagany';
-        }
-
-        return $errors;
-    }
 }

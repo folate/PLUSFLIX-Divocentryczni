@@ -11,10 +11,10 @@ class MovieController
 {
     public function indexAction(Templating $templating, Router $router): ?string
     {
-        $q = null;
-        $catId = null;
-        $platformId = null;
-        $sort = null;
+        $q = $_GET['q'] ?? null;
+        $catId = $_GET['category'] ?? null;
+        $platformId = $_GET['platform'] ?? null;
+        $sort = $_GET['sort'] ?? null; 
         if (!$q && !$catId && !$platformId && !$sort) {
             $movies = Movie::findTopRated(10); 
             $categories = Category::findAll();
@@ -81,7 +81,9 @@ class MovieController
             'count' => $count,
             'totalAvg' => $totalAvg,
             'router' => $router,
-            'currentParams' => $_GET 
+            'currentParams' => $_GET,
+            'categories' => Category::findAll(),
+            'platforms' => Platform::findAll()
         ]);
     }
     public function showAction(Templating $templating, Router $router): ?string
@@ -94,7 +96,7 @@ class MovieController
         $comments = Comment::findByMovieId($id);
         $platforms = Platform::findByMovieId((int)$id);
         $avgRating = \App\Model\Rating::getAvgRating($id);
-        $favorites = [];
+        $favorites = $_SESSION['favorites'] ?? [];
         $isFavorite = in_array($movie->getId(), $favorites);
         $html = $templating->render('movie/show.html.php', [
             'movie' => $movie,
@@ -128,19 +130,15 @@ class MovieController
             'movies' => $movieData,
             'globalAvgRating' => $globalAvgRating,
             'router' => $router,
-            'moviesCount' => 0,
-            'categoriesCount' => 0,
-            'platformsCount' => 0,
-            'commentsCount' => 0
+            'moviesCount' => count($movies),
+            'categoriesCount' => count($categories),
+            'platformsCount' => count($platforms),
+            'commentsCount' => count($comments)
         ]);
         return $html;
     }
     public function createAction(?array $requestPost, Templating $templating, Router $router): ?string
     {
-        $movie = new Movie();
-        $errors = [];
-        $data = [];
-
         if ($requestPost) {
             $data = $requestPost['movie'] ?? [];
             
@@ -149,29 +147,26 @@ class MovieController
                 $data['image_path'] = $uploadedPath;
             }
 
-            // Populate movie object immediately for potential re-render
-            $movie->setTitle($data['title'] ?? '');
-            $movie->setYear(isset($data['year']) ? (int)$data['year'] : null);
-            $movie->setDuration(isset($data['duration']) ? (int)$data['duration'] : null);
-            $movie->setDescription($data['description'] ?? '');
-            $movie->setImagePath($data['image_path'] ?? null);
-            $movie->setCatId(isset($data['cat_id']) ? (int)$data['cat_id'] : null);
-
-            $errors = Movie::validate($data);
-
-            if (empty($errors)) {
-                $movie->save();
-                
-                if (isset($data['platforms']) && is_array($data['platforms'])) {
-                    $movie->updatePlatforms($data['platforms']);
-                }
-
-                $path = $router->generatePath('admin-movie-index');
-                $router->redirect($path);
-                return null;
+            $movieData = [
+                'title' => $data['title'] ?? '',
+                'year' => $data['year'] ?? '',
+                'duration' => $data['duration'] ?? '',
+                'description' => $data['description'] ?? '',
+                'image_path' => $data['image_path'] ?? '',
+                'cat_id' => $data['cat_id'] ?? null,
+            ];
+            $movie = Movie::fromArray($movieData);
+            $movie->save();
+            
+            if (isset($data['platforms']) && is_array($data['platforms'])) {
+                $movie->updatePlatforms($data['platforms']);
             }
-        }
 
+            $path = $router->generatePath('admin-movie-index');
+            $router->redirect($path);
+            return null;
+        }
+        $movie = new Movie();
         $categories = Category::findAll();
         $platforms = Platform::findAll();
         $html = $templating->render('movie/create.html.php', [
@@ -179,7 +174,6 @@ class MovieController
             'categories' => $categories,
             'platforms' => $platforms,
             'router' => $router,
-            'errors' => $errors,
         ]);
         return $html;
     }
@@ -190,41 +184,29 @@ class MovieController
         if (! $movie) {
             throw new NotFoundException("Missing movie with id $id");
         }
-        
-        $errors = [];
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST['movie'] ?? [];
             
             $uploadedPath = $this->handleFileUpload($_FILES['image_file'] ?? null);
             if ($uploadedPath) {
                 $data['image_path'] = $uploadedPath;
-            } else {
-                // Keep existing image if not replaced
-                 $data['image_path'] = $movie->getImagePath();
             }
 
-            // Update local object for potential re-render
             $movie->setTitle($data['title']);
-            $movie->setYear((int)$data['year']);
-            $movie->setDuration((int)$data['duration']);
+            $movie->setYear($data['year']);
+            $movie->setDuration($data['duration']);
             $movie->setDescription($data['description']);
             $movie->setImagePath($data['image_path']);
-            $movie->setCatId((int)$data['cat_id']);
+            $movie->setCatId($data['cat_id']);
+            $movie->save();
 
-            $errors = Movie::validate($data);
-
-            if (empty($errors)) {
-                $movie->save();
-
-                if (isset($data['platforms']) && is_array($data['platforms'])) {
-                    $movie->updatePlatforms($data['platforms']);
-                }
-
-                $path = $router->generatePath('admin-movie-index');
-                $router->redirect($path);
-                return null;
+            if (isset($data['platforms']) && is_array($data['platforms'])) {
+                $movie->updatePlatforms($data['platforms']);
             }
+
+            $path = $router->generatePath('admin-movie-index');
+            $router->redirect($path);
+            return null;
         }
         $categories = Category::findAll();
         $platforms = Platform::findAll();
@@ -236,7 +218,6 @@ class MovieController
             'platforms' => $platforms,
             'moviePlatforms' => $moviePlatforms,
             'router' => $router,
-            'errors' => $errors,
         ]);
         return $html;
     }

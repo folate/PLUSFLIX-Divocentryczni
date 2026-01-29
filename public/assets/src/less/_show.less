@@ -400,43 +400,56 @@
   }
 }
 
-// High Contrast Mode Support
+// High Contrast Mode for Show Page
 body.high-contrast {
   .movie-show-container {
+
+    // Hero Section
     .movie-hero {
       background: #000;
       border: 2px solid #ffff00;
 
-      .hero-header h1 {
-        color: #ffff00;
-        text-decoration: underline;
-      }
-
-      .hero-description {
-        color: #ffff00;
-      }
-
-      .hero-meta div {
-        color: #ffff00;
-
-        strong {
-          color: #ffff00;
-          text-decoration: underline;
-        }
-      }
-
-      .hero-actions-bottom .btn-add-review {
+      .hero-poster .no-poster {
         background: #000;
-        color: #ffff00;
         border: 2px solid #ffff00;
+        color: #ffff00;
+      }
 
-        &:hover {
-          background: #ffff00;
-          color: #000;
+      .hero-info {
+        .hero-header h1 {
+          color: #ffff00;
+        }
+
+        .hero-description {
+          color: #ffff00;
+        }
+
+        .hero-meta {
+          border-top-color: #ffff00;
+
+          div {
+            color: #ffff00;
+
+            strong {
+              color: #ffff00;
+            }
+          }
+        }
+
+        .hero-actions-bottom .btn-add-review {
+          background: #000;
+          border: 2px solid #ffff00;
+          color: #ffff00;
+
+          &:hover {
+            background: #ffff00;
+            color: #000;
+          }
         }
       }
     }
 
+    // Split Content
     .content-split {
 
       .platforms-section,
@@ -445,11 +458,12 @@ body.high-contrast {
         border: 2px solid #ffff00;
 
         h3 {
-          color: #ffff00;
           border-bottom-color: #ffff00;
+          color: #ffff00;
         }
       }
 
+      // Platforms
       .platform-list .platform-item {
         background: #000;
         border: 1px solid #ffff00;
@@ -459,21 +473,27 @@ body.high-contrast {
           background: #ffff00;
           color: #000;
 
-          span {
+          .platform-details {
+            border-color: #000;
             color: #000;
           }
         }
 
-        span {
-          color: #ffff00;
+        img {
+          border: 1px solid #ffff00;
         }
 
         .platform-details {
-          color: #ffff00;
           border-color: #ffff00;
+          color: #ffff00;
         }
       }
 
+      p {
+        color: #ffff00 !important;
+      }
+
+      // Reviews
       .reviews-list .review-item {
         background: #000;
         border: 1px solid #ffff00;
@@ -481,7 +501,6 @@ body.high-contrast {
         .review-header {
           .nick {
             color: #ffff00;
-            font-weight: bold;
           }
 
           .date {
@@ -495,20 +514,22 @@ body.high-contrast {
 
         .review-rating {
           color: #ffff00;
+
+          .empty-star {
+            color: #ffff00;
+            opacity: 0.5;
+          }
         }
       }
     }
   }
 
+  // Modal High Contrast
   .modal-overlay .modal-content {
     background: #000;
     border: 2px solid #ffff00;
 
-    h3 {
-      color: #ffff00;
-      text-decoration: underline;
-    }
-
+    h3,
     .modal-close {
       color: #ffff00;
     }
@@ -525,8 +546,12 @@ body.high-contrast {
         color: #ffff00;
 
         &:focus {
-          outline: 2px solid #ffff00;
+          outline: 1px solid #ffff00;
         }
+      }
+
+      .star-rating-input label {
+        color: #ffff00;
       }
     }
 
